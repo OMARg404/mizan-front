@@ -1,5 +1,7 @@
 // src/App.jsx
 import 'bootstrap/dist/css/bootstrap.rtl.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar'; // Adjusted path
