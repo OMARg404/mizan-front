@@ -1,0 +1,148 @@
+/* UserPermissions.css */
+
+.container {
+    max-width: 800px;
+    /* Keep the max-width for the user permissions section */
+    margin: 0 auto;
+    /* Center the container */
+    padding: 20px;
+    /* Add some padding */
+}
+
+
+/* Title Styles */
+
+.page-title {
+    font-size: 1.8rem;
+    /* Adjusted font size for better consistency */
+    text-align: center;
+    /* Center align title */
+    margin-bottom: 15px;
+    /* Reduced margin */
+    color: #0f60b8;
+    /* Primary color */
+}
+
+
+/* Section Title Styles */
+
+.section-title {
+    font-size: 1.25rem;
+    /* Adjusted font size */
+    margin-top: 15px;
+    /* Adjusted margin */
+    margin-bottom: 10px;
+    /* Space below section title */
+    color: #343a40;
+    /* Darker color for better readability */
+}
+
+
+/* User Form Styles */
+
+.user-form {
+    padding: 15px;
+    /* Slightly less padding */
+}
+
+
+/* User Table Styles */
+
+.user-table {
+    width: 100%;
+    /* Full width for the table */
+    margin-top: 15px;
+    /* Space above the table */
+    border-collapse: collapse;
+    /* Collapsed borders */
+}
+
+.user-table th,
+.user-table td {
+    padding: 10px;
+    /* Reduced padding for better fit */
+    text-align: left;
+    /* Left align text */
+    border-bottom: 1px solid #dee2e6;
+    /* Light border below rows */
+}
+
+.user-table th {
+    background-color: #007bff;
+    /* Header color */
+    color: white;
+    /* White text for header */
+}
+
+.user-table tr:hover {
+    background-color: #e9ecef;
+    /* Light hover effect */
+}
+
+
+/* Input Styles */
+
+.form-control {
+    border: 1px solid #ced4da;
+    /* Light border */
+    border-radius: 0.25rem;
+    /* Consistent border radius */
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    /* Primary color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    /* Shadow on focus */
+}
+
+
+/* Button Styles */
+
+.btn-primary {
+    background-color: #007bff;
+    /* Primary button color */
+    border: none;
+    /* No border */
+    transition: background-color 0.3s ease;
+    /* Smooth transition */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    /* Darker shade on hover */
+}
+
+
+/* Additional Styles for Responsive Design */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        /* Reduced padding for smaller screens */
+    }
+    .user-table th,
+    .user-table td {
+        padding: 8px;
+        /* Smaller padding for table cells */
+    }
+}
+
+
+/* UserPermissions.css */
+
+.permissions-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.permission-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.permission-checkbox input {
+    margin-right: 5px;
+}

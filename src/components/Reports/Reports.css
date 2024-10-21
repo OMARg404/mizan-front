@@ -1,0 +1,111 @@
+Reports.css .container {
+    max-width: 800px;
+    margin: 20px auto;
+    /* Adjust margin for better spacing */
+    padding: 20px;
+    background-color: #ffffff;
+    /* Changed to white for consistency */
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    /* Lighter shadow for a softer look */
+}
+
+.page-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
+    /* Changed to a darker shade for better readability */
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filters .form-control {
+    flex: 1;
+    /* Ensures equal spacing */
+    margin-right: 10px;
+    /* Space between inputs */
+}
+
+.filters .form-control:last-child {
+    margin-right: 0;
+    /* No margin for the last input */
+}
+
+.report-content {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    /* Light background for contrast */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    /* Keep primary button color */
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    /* Darker shade on hover */
+}
+
+
+/* Reports.css */
+
+.reports-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reports-page-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.reports-filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.reports-filters .form-control {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.reports-filters .form-control:last-child {
+    margin-right: 0;
+}
+
+.reports-content {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reports-btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.reports-btn-primary:hover {
+    background-color: #0056b3;
+}

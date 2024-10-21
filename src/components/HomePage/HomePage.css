@@ -1,0 +1,42 @@
+.hero-section {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.hero-image {
+    width: 100%;
+    /* Full width */
+    height: auto;
+    /* Maintain aspect ratio */
+    max-height: 1200px;
+    /* Limit height */
+    object-fit: cover;
+    /* Cover to avoid distortion */
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Dark overlay for text readability */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+    /* Ensures image covers the card properly */
+}
+
+.testimonial-card {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 10px;
+}

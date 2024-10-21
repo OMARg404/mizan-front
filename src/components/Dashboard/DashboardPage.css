@@ -1,0 +1,88 @@
+/* src/components/Dashboard/DashboardPage.css */
+
+.dashboard-container {
+    padding: 20px;
+}
+
+.kpi-cards {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+
+/* src/components/Dashboard/DashboardPage.css */
+
+.dashboard-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    /* Light background color */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+}
+
+.dashboard-title {
+    font-size: 2em;
+    /* Larger font size for title */
+    color: #343a40;
+    /* Darker text color */
+    margin-bottom: 20px;
+    /* Space below the title */
+    text-align: center;
+    /* Centered title */
+}
+
+.kpi-cards {
+    display: flex;
+    /* Flex layout for cards */
+    justify-content: space-around;
+    /* Space between cards */
+    margin-bottom: 30px;
+    /* Space below cards */
+}
+
+.chart-section {
+    margin-bottom: 30px;
+    /* Space below the chart */
+    text-align: center;
+    /* Center the chart section */
+}
+
+.recent-activities-section {
+    background-color: #ffffff;
+    /* White background for activities */
+    border-radius: 8px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Padding inside */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+}
+
+.recent-activities-section h2 {
+    font-size: 1.5em;
+    /* Font size for recent activities */
+    color: #343a40;
+    /* Dark text color */
+}
+
+.recent-activities-section ul {
+    list-style-type: none;
+    /* Remove default list style */
+    padding: 0;
+    /* Remove padding */
+}
+
+.recent-activities-section li {
+    padding: 10px;
+    /* Padding for each activity */
+    border-bottom: 1px solid #e9ecef;
+    /* Light border for separation */
+}
+
+.recent-activities-section li:last-child {
+    border-bottom: none;
+    /* Remove border from last item */
+}

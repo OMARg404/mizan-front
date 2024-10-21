@@ -1,0 +1,117 @@
+/* Budget.css */
+
+body {
+    background-color: #f8f9fa;
+    /* Light background for the overall page */
+}
+
+h1 {
+    color: #007bff;
+    /* Bootstrap primary color for headings */
+    font-weight: 700;
+    /* Bold font weight */
+}
+
+h2 {
+    color: #343a40;
+    /* Darker shade for section headings */
+    margin-top: 1.5rem;
+    /* Space above section headings */
+}
+
+.table {
+    background-color: #ffffff;
+    /* White background for the table */
+    border-radius: 0.5rem;
+    /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow effect */
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    /* Center align table content */
+}
+
+.table th {
+    background-color: #2778c9;
+    /* Bootstrap primary color for table header */
+    color: white;
+    /* White text for headers */
+}
+
+.table tr:hover {
+    background-color: #e9ecef;
+    /* Light grey on row hover */
+}
+
+.card {
+    margin: 1rem 0;
+    /* Space between cards */
+}
+
+.card-header {
+    background-color: #004c98;
+    ;
+    /* Card header color */
+    color: white;
+    /* Card header text color */
+    font-weight: 700;
+    /* Bold font for headers */
+}
+
+.btn {
+    margin-top: 0.5rem;
+    /* Margin for buttons */
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    /* Red for delete buttons */
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    /* Darker red on hover */
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    /* Yellow for save buttons */
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    /* Darker yellow on hover */
+}
+
+.btn-success {
+    background-color: #28a745;
+    /* Green for download buttons */
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    /* Rounded corners for input fields */
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    /* Space between form groups */
+}
+
+label {
+    font-weight: 600;
+    /* Bold for labels */
+}
+
+.row {
+    margin-bottom: 2rem;
+    /* Space between rows */
+}

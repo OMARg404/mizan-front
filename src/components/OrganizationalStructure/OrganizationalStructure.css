@@ -1,0 +1,24 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+button {
+    margin-bottom: 20px;
+}
+
+
+/* Optional: Add a border for better visibility */
+
+.react-flow {
+    border: 1px solid #ddd;
+    /* Optional border for the flow area */
+    height: 500px;
+    /* Ensure the height is set */
+}

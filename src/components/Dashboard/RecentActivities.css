@@ -1,0 +1,47 @@
+/* src/components/Dashboard/RecentActivities.css */
+
+.recent-activities {
+    margin-top: 20px;
+}
+
+.recent-activities ul {
+    list-style: none;
+    padding: 0;
+}
+
+
+/* src/components/Dashboard/RecentActivities.css */
+
+.recent-activities-container {
+    background-color: #f9f9f9;
+    /* Light background for contrast */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.recent-activities-title {
+    font-size: 24px;
+    color: #333;
+    /* Dark text color */
+    margin-bottom: 15px;
+    text-align: right;
+    /* Right align the title for Arabic */
+}
+
+.recent-activities-list {
+    list-style-type: none;
+    /* Remove bullet points */
+    padding: 0;
+    /* Remove padding */
+}
+
+.recent-activities-list li {
+    padding: 8px 0;
+    /* Space between items */
+    font-size: 18px;
+    /* Increase font size for better readability */
+    color: #555;
+    /* Gray text color for items */
+}

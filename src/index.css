@@ -1,0 +1,9 @@
+/* Add any global styles here */
+
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    /* Add this line for RTL layout */
+    text-align: right;
+    /* Add this line for right-align text */
+}
