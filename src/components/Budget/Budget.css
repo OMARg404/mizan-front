@@ -115,3 +115,29 @@ label {
     margin-bottom: 2rem;
     /* Space between rows */
 }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.chart {
+    margin-top: 20px;
+}

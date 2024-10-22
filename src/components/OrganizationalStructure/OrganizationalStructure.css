@@ -1,24 +1,159 @@
-.container {
-    max-width: 800px;
-    margin: auto;
+/* Container for the entire dashboard */
+
+.dashboard {
+    display: flex;
+    height: 100vh;
+    /* Use full viewport height */
+}
+
+
+/* Sidebar styling */
+
+.sidebar {
+    width: 300px;
+    /* Increase sidebar width */
+    background-color: #f4f4f4;
+    padding: 30px;
+    /* Add more padding */
+    border-right: 2px solid #ddd;
+    font-size: 1.2rem;
+    /* Increase font size */
+}
+
+
+/* Card styling for organizational items */
+
+.org-card {
+    margin: 20px 0;
+    /* Increase margin between cards */
     padding: 20px;
+    /* Increase padding inside cards */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    /* More rounded corners */
+    transition: box-shadow 0.3s, transform 0.3s;
+    /* Add a transform effect */
+    font-size: 1.1rem;
+    /* Increase font size */
 }
 
-h1 {
-    text-align: center;
+
+/* Hover effect for cards */
+
+.org-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+    /* Slightly scale up on hover */
+}
+
+
+/* Header for organizational items */
+
+.org-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+
+/* Item name styling */
+
+.org-item-name {
+    font-size: 1.5rem;
+    /* Increase name font size */
+    margin: 0;
+}
+
+
+/* Icon styling */
+
+.toggle-icon {
+    margin-left: 15px;
+    /* More space between name and icon */
+    font-size: 1.2rem;
+    /* Increase icon size */
+}
+
+
+/* Edit button styling */
+
+.edit-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 1.2rem;
+    /* Increase edit button font size */
+}
+
+.edit-button:hover {
+    text-decoration: underline;
+}
+
+
+/* Description styling for items */
+
+.org-item-description {
+    margin: 10px 0 0 0;
+    font-size: 1rem;
+    /* Slightly increase description font size */
+    color: #666;
+}
+
+
+/* Children container styling */
+
+.children {
+    margin-left: 30px;
+    /* More space for child items */
+}
+
+
+/* Additional styles for search and action buttons */
+
+.search-bar {
+    display: flex;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-button {
-    margin-bottom: 20px;
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+.add-item-button,
+.export-pdf-button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-item-button:hover,
+.export-pdf-button:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
 }
 
 
-/* Optional: Add a border for better visibility */
+/* Add this to your OrganizationalStructure.css */
 
-.react-flow {
-    border: 1px solid #ddd;
-    /* Optional border for the flow area */
-    height: 500px;
-    /* Ensure the height is set */
+.dropdown-menu {
+    max-height: 300px;
+    /* Set a max height */
+    overflow-y: auto;
+    /* Enable scrolling if content exceeds max height */
+    z-index: 1050;
+    /* Ensure it appears above other content */
 }

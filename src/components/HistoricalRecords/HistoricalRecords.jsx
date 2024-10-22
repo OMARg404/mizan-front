@@ -1,35 +1,61 @@
 import React, { useState } from 'react';
-import { CSVLink } from 'react-csv'; // Import CSVLink from react-csv
+import { CSVLink } from 'react-csv';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const HistoricalRecords = () => {
   const [records, setRecords] = useState([]);
   const [year, setYear] = useState('');
   const [details, setDetails] = useState('');
-  const [notes, setNotes] = useState(''); // حقل الملاحظات
+  const [notes, setNotes] = useState(''); // Notes field
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [editIndex, setEditIndex] = useState(null); // مؤشر السجل المعدل
-  const [fileName, setFileName] = useState('historical_records.csv'); // State for the file name
+  const [editIndex, setEditIndex] = useState(null);
+  const [fileName, setFileName] = useState('historical_records.csv');
 
   const handleAddOrUpdateRecord = (e) => {
     e.preventDefault();
 
+    if (!validateInputs()) return; // Validate inputs before proceeding
+
     if (isEditing) {
-      const updatedRecords = records.map((record, index) => 
-        index === editIndex ? { year, details, notes } : record
-      );
-      setRecords(updatedRecords);
-      setIsEditing(false);
-      setEditIndex(null);
+      updateRecord();
     } else {
-      const newRecord = { year, details, notes };
-      setRecords([...records, newRecord]);
+      addRecord();
     }
 
+    resetForm();
+  };
+
+  const validateInputs = () => {
+    if (!year || !details) {
+      alert("الرجاء ملء جميع الحقول المطلوبة.");
+      return false;
+    }
+    if (isNaN(year)) {
+      alert("يجب أن تكون السنة رقمًا.");
+      return false;
+    }
+    return true;
+  };
+
+  const addRecord = () => {
+    const newRecord = { year, details, notes };
+    setRecords([...records, newRecord]);
+  };
+
+  const updateRecord = () => {
+    const updatedRecords = records.map((record, index) =>
+      index === editIndex ? { year, details, notes } : record
+    );
+    setRecords(updatedRecords);
+    setIsEditing(false);
+    setEditIndex(null);
+  };
+
+  const resetForm = () => {
     setYear('');
     setDetails('');
-    setNotes(''); // إعادة تعيين حقل الملاحظات
+    setNotes('');
   };
 
   const handleEditRecord = (index) => {
@@ -42,8 +68,10 @@ const HistoricalRecords = () => {
   };
 
   const handleDeleteRecord = (index) => {
-    const newRecords = records.filter((_, i) => i !== index);
-    setRecords(newRecords);
+    if (window.confirm("هل أنت متأكد أنك تريد حذف هذا السجل؟")) {
+      const newRecords = records.filter((_, i) => i !== index);
+      setRecords(newRecords);
+    }
   };
 
   const filteredRecords = records.filter((record) =>
@@ -95,7 +123,7 @@ const HistoricalRecords = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="الملاحظات" // حقل الملاحظات الجديد
+              placeholder="الملاحظات"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
@@ -137,7 +165,7 @@ const HistoricalRecords = () => {
                 <td>
                   <button
                     className="btn btn-warning mr-2"
-                    onClick={() => handleEditRecord(index)} // زر التحرير
+                    onClick={() => handleEditRecord(index)}
                   >
                     تعديل
                   </button>
@@ -160,23 +188,21 @@ const HistoricalRecords = () => {
         </tbody>
       </table>
 
-      {/* File Name Input */}
       <div className="mb-4">
         <input
           type="text"
           className="form-control"
           placeholder="اسم الملف (مع الامتداد)"
           value={fileName}
-          onChange={(e) => setFileName(e.target.value)} // Update file name
+          onChange={(e) => setFileName(e.target.value)}
         />
       </div>
 
-      {/* Download Button */}
       <div className="mb-4">
         <CSVLink 
           data={csvData} 
           headers={csvHeaders} 
-          filename={fileName} // Use the user-defined file name
+          filename={fileName}
           className="btn btn-success"
           target="_blank"
         >

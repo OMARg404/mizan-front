@@ -1,38 +1,243 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { CSVLink } from 'react-csv';
+import { Pie } from 'react-chartjs-2';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './ReserveAmounts.css'; // Optional: Custom CSS for styling
 
 const ReserveAmounts = () => {
+    const [reserveRecords, setReserveRecords] = useState([
+        { amount: '1000', details: 'مبلغ احتياطي لمشروع A' },
+        { amount: '2000', details: 'مبلغ احتياطي لمشروع B' },
+        { amount: '1500', details: 'مبلغ احتياطي لمشروع C' },
+    ]);
+    const [amount, setAmount] = useState('');
+    const [details, setDetails] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [editIndex, setEditIndex] = useState(null);
+    const [fileName, setFileName] = useState('reserve_amounts.csv'); // State for the file name
+    const [budgetRequest, setBudgetRequest] = useState(''); // State for budget request
+    const [pendingRequests, setPendingRequests] = useState([
+        { request: 'طلب ميزانية لمشروع X', amount: '5000' },
+        { request: 'طلب ميزانية لمشروع Y', amount: '3000' },
+    ]); // Default budget requests
+
+    const handleAddOrUpdateRecord = (e) => {
+        e.preventDefault();
+
+        if (isEditing) {
+            const updatedRecords = reserveRecords.map((record, index) => 
+                index === editIndex ? { amount, details } : record
+            );
+            setReserveRecords(updatedRecords);
+            setIsEditing(false);
+            setEditIndex(null);
+        } else {
+            const newRecord = { amount, details };
+            setReserveRecords([...reserveRecords, newRecord]);
+        }
+
+        setAmount('');
+        setDetails('');
+    };
+
+    const handleEditRecord = (index) => {
+        const recordToEdit = reserveRecords[index];
+        setAmount(recordToEdit.amount);
+        setDetails(recordToEdit.details);
+        setIsEditing(true);
+        setEditIndex(index);
+    };
+
+    const handleDeleteRecord = (index) => {
+        const newRecords = reserveRecords.filter((_, i) => i !== index);
+        setReserveRecords(newRecords);
+    };
+
+    const filteredRecords = reserveRecords.filter((record) =>
+        record.amount.includes(searchTerm) || 
+        record.details.includes(searchTerm)
+    );
+
+    const csvData = filteredRecords.map(record => ({
+        amount: record.amount,
+        details: record.details,
+    }));
+
+    const csvHeaders = [
+        { label: 'المبلغ', key: 'amount' },
+        { label: 'التفاصيل', key: 'details' },
+    ];
+
+    const pieData = {
+        labels: reserveRecords.map(record => record.details),
+        datasets: [{
+            data: reserveRecords.map(record => parseFloat(record.amount)),
+            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A6', '#FFC300', '#DAF7A6'],
+        }],
+    };
+
+    const handleBudgetRequest = (e) => {
+        e.preventDefault();
+        setPendingRequests([...pendingRequests, { request: budgetRequest, amount }]);
+        alert(`طلب الميزانية: ${budgetRequest} بمبلغ: ${amount}`);
+        setBudgetRequest('');
+    };
+
+    const handleRequestDecision = (index, decision) => {
+        if (decision === 'accept') {
+            alert(`تم قبول الطلب: ${pendingRequests[index].request}`);
+        } else {
+            alert(`تم رفض الطلب: ${pendingRequests[index].request}`);
+        }
+        const updatedRequests = pendingRequests.filter((_, i) => i !== index);
+        setPendingRequests(updatedRequests);
+    };
+
     return (
-        <div className="container mt-4">
-            <h1>مبالغ الاحتياطي</h1>
+        <div className="container mt-5">
+            <h1>مبالغ الاحتياطي وطلبات الميزانية</h1>
             <p>تُعتبر مبالغ الاحتياطي أحد العناصر الأساسية في التخطيط المالي للأعمال. تهدف إلى ضمان الاستقرار المالي وتهيئة البيئة المناسبة للنمو المستدام.</p>
 
-            <h2>المميزات:</h2>
-            <ul>
-                <li>توفير آلية مرنة لإدارة الأرصدة المالية تساهم في مواجهة التغيرات السريعة في السوق.</li>
-                <li>زيادة القدرة على التنبؤ بالمصاريف المستقبلية وتحديد الاحتياجات المالية بدقة.</li>
-                <li>تحسين الشفافية في إدارة الأموال مما يعزز الثقة بين المستثمرين وأصحاب المصلحة.</li>
-                <li>تسهيل عملية التخطيط المالي والموازنات، مما يسمح بإعداد استراتيجيات أكثر فعالية.</li>
-                <li>تقديم بيانات دقيقة لتحليل الأداء المالي والتجاري.</li>
-            </ul>
+            <form onSubmit={handleAddOrUpdateRecord} className="mb-4">
+                <div className="form-row align-items-end">
+                    <div className="col">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="المبلغ"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="col">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="التفاصيل"
+                            value={details}
+                            onChange={(e) => setDetails(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="col">
+                        <button type="submit" className="btn btn-primary">
+                            {isEditing ? 'تحديث السجل' : 'إضافة سجل'}
+                        </button>
+                    </div>
+                </div>
+            </form>
 
-            <h2>الفوائد:</h2>
-            <ol>
-                <li>تمكين المؤسسات من اتخاذ قرارات مالية مستنيرة تستند إلى بيانات دقيقة وتحليلات شاملة.</li>
-                <li>تعزيز الاستدامة المالية على المدى الطويل، مما يقلل من مخاطر الإفلاس.</li>
-                <li>تقليل المخاطر المرتبطة بالتغيرات الاقتصادية عن طريق توفير أمان مالي إضافي.</li>
-                <li>زيادة مستوى الثقة بين أصحاب المصلحة، مما يسهل جمع التمويل والاستثمار في المشاريع.</li>
-                <li>دعم الابتكار من خلال توافر الموارد المالية اللازمة لاستكشاف فرص جديدة.</li>
-            </ol>
+            <div className="mb-4">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="بحث..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
 
-            <h2>تطبيقات عملية:</h2>
-            <p>يمكن استخدام مبالغ الاحتياطي في العديد من المجالات، مثل:</p>
-            <ul>
-                <li>إعداد خطط الطوارئ لمواجهة الأزمات المالية.</li>
-                <li>تخصيص موارد للتوسع في الأسواق الجديدة.</li>
-                <li>تحقيق الاستقرار في العمليات اليومية والتقليل من التوتر المالي.</li>
-                <li>استثمار الأموال الاحتياطية في أدوات مالية ذات عائد مرتفع.</li>
-            </ul>
+            <table className="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>المبلغ</th>
+                        <th>التفاصيل</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredRecords.length > 0 ? (
+                        filteredRecords.map((record, index) => (
+                            <tr key={index}>
+                                <td>{record.amount}</td>
+                                <td>{record.details}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-warning mr-2"
+                                        onClick={() => handleEditRecord(index)}
+                                    >
+                                        تعديل
+                                    </button>
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={() => handleDeleteRecord(index)}
+                                    >
+                                        حذف
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3" className="text-center">
+                                لا توجد سجلات
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+
+            <div className="mb-4">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="اسم الملف (مع الامتداد)"
+                    value={fileName}
+                    onChange={(e) => setFileName(e.target.value)}
+                />
+            </div>
+
+            <div className="mb-4">
+                <CSVLink 
+                    data={csvData} 
+                    headers={csvHeaders} 
+                    filename={fileName}
+                    className="btn btn-success"
+                    target="_blank"
+                >
+                    تحميل السجلات
+                </CSVLink>
+            </div>
+
+            {/* Budget Request Section */}
+            <form onSubmit={handleBudgetRequest} className="mb-4">
+                <h2>طلب ميزانية</h2>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="اكتب طلب الميزانية"
+                    value={budgetRequest}
+                    onChange={(e) => setBudgetRequest(e.target.value)}
+                    required
+                />
+                <button type="submit" className="btn btn-info mt-2">إرسال طلب الميزانية</button>
+            </form>
+
+            {/* Pending Budget Requests */}
+            {pendingRequests.length > 0 && (
+                <div className="mb-4">
+                    <h2 className="text-danger">طلبات الميزانية المعلقة</h2>
+                    <ul className="list-group">
+                        {pendingRequests.map((request, index) => (
+                            <li key={index} className="list-group-item d-flex justify-content-between align-items-center" style={{ backgroundColor: '#ffeb3b' }}>
+                                {request.request} بمبلغ: {request.amount}
+                                <div>
+                                    <button className="btn btn-success btn-sm mr-2" onClick={() => handleRequestDecision(index, 'accept')}>قبول</button>
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleRequestDecision(index, 'reject')}>رفض</button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {/* Pie Chart Visualization */}
+            <div className="mt-4">
+                <h2>عرض الميزانية</h2>
+                <Pie data={pieData} />
+            </div>
         </div>
     );
 };
