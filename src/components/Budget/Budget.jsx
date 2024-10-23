@@ -3,7 +3,6 @@ import { Container, Row, Col, Card, Button, Form, Table, Modal } from 'react-boo
 import { saveAs } from 'file-saver';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import axios from 'axios';
 import './Budget.css';
 
 const Budget = () => {
@@ -18,24 +17,23 @@ const Budget = () => {
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState('');
-  const [fileFormat, setFileFormat] = useState('txt'); // Default file format
+  const [fileFormat, setFileFormat] = useState('txt');
   const [showFileFormatModal, setShowFileFormatModal] = useState(false);
   const [allBudgetsData, setAllBudgetsData] = useState('');
-  const [changesMade, setChangesMade] = useState(false); // Track if changes are made
+  const [changesMade, setChangesMade] = useState(false);
 
-  // Archive data function
-  const archiveData = () => {
-    axios.post('/api/archive', categories)
-      .then(() => {
-        setCategories(categories.map(category => ({
-          ...category,
-          allocation: 0,
-          spent: 0,
-        })));
-        alert('تم أرشفة البيانات بنجاح!');
-      })
-      .catch(error => console.error('Error archiving data:', error));
-  };
+  // State for clock and date
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  // Function to update time every second
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   // Call this function at the end of the month
   useEffect(() => {
@@ -68,11 +66,11 @@ const Budget = () => {
       return category;
     });
     setCategories(updatedCategories);
-    setChangesMade(true); // Mark changes as made
+    setChangesMade(true);
   };
 
   const handleSaveChanges = () => {
-    setChangesMade(false); // Reset changes made flag
+    setChangesMade(false);
     alert('تم حفظ التغييرات بنجاح!');
   };
 
@@ -147,6 +145,14 @@ const Budget = () => {
   return (
     <Container fluid className="p-4">
       <h1 className="text-center mb-4">نظرة عامة على الميزانية</h1>
+      
+      {/* Clock and Date */}
+      <Row className="mb-4">
+        <Col md={12} className="text-center">
+          <h2>{currentDate.toLocaleDateString('ar-EG')} - {currentDate.toLocaleTimeString('ar-EG')}</h2>
+        </Col>
+      </Row>
+
       <Row className="mb-4">
         <Col md={6}>
           <Card>
@@ -227,42 +233,82 @@ const Budget = () => {
                   ))}
                 </tbody>
               </Table>
-              {changesMade && (
-                <Button variant="primary" onClick={handleSaveChanges} className="mt-3">
-                  حفظ التغييرات
-                </Button>
-              )}
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
-      <Row className="mb-4">
+      {/* Add new category form */}
+      <Row>
         <Col md={12}>
-          <h2>إضافة قسم جديد</h2>
-          <Form>
-            <Form.Group controlId="formCategoryName">
-              <Form.Label>اسم القسم</Form.Label>
-              <Form.Control
-                type="text"
-                value={newCategory.name}
-                onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="formCategoryDescription">
-              <Form.Label>الوصف</Form.Label>
-              <Form.Control
-                type="text"
-                value={newCategory.description}
-                onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-              />
-            </Form.Group>
-            <Button variant="primary" onClick={handleAddCategory}>
-              إضافة قسم
-            </Button>
-          </Form>
+          <Card>
+            <Card.Body>
+              <Card.Title>إضافة قسم جديد</Card.Title>
+              <Form>
+                <Form.Group controlId="formCategoryName">
+                  <Form.Label>اسم القسم</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={newCategory.name}
+                    onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                    placeholder="أدخل اسم القسم"
+                  />
+                </Form.Group>
+                <Form.Group controlId="formCategoryDescription">
+                  <Form.Label>الوصف</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={newCategory.description}
+                    onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                    placeholder="أدخل الوصف"
+                  />
+                </Form.Group>
+                <Form.Group controlId="formCategoryAllocation">
+                  <Form.Label>التخصيص</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={newCategory.allocation}
+                    onChange={(e) => setNewCategory({ ...newCategory, allocation: e.target.value })}
+                    placeholder="أدخل التخصيص"
+                  />
+                </Form.Group>
+                <Form.Group controlId="formCategorySpent">
+                  <Form.Label>المصروف</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={newCategory.spent}
+                    onChange={(e) => setNewCategory({ ...newCategory, spent: e.target.value })}
+                    placeholder="أدخل المصروف"
+                  />
+                </Form.Group>
+                <Button variant="primary" onClick={handleAddCategory}>
+                  إضافة قسم
+                </Button>
+                {changesMade && (
+                  <Button variant="success" onClick={handleSaveChanges} className="ml-2">
+                    حفظ التغييرات
+                  </Button>
+                )}
+              </Form>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
+
+      {/* Report Modal */}
+      <Modal show={showReportModal} onHide={() => setShowReportModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>تقرير الميزانية</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <pre>{reportData}</pre>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowReportModal(false)}>
+            إغلاق
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
@@ -280,22 +326,7 @@ const Budget = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Report Modal */}
-      <Modal show={showReportModal} onHide={() => setShowReportModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>تقرير الميزانية</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <pre>{reportData}</pre>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowReportModal(false)}>
-            إغلاق
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* File Format Modal */}
+      {/* File Format Selection Modal */}
       <Modal show={showFileFormatModal} onHide={() => setShowFileFormatModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>اختر تنسيق الملف</Modal.Title>
@@ -304,8 +335,8 @@ const Budget = () => {
           <Form>
             <Form.Group controlId="formFileFormat">
               <Form.Label>تنسيق الملف</Form.Label>
-              <Form.Control as="select" value={fileFormat} onChange={(e) => setFileFormat(e.target.value)}>
-                <option value="txt">نص عادي</option>
+              <Form.Control as="select" onChange={(e) => setFileFormat(e.target.value)}>
+                <option value="txt">نص (TXT)</option>
                 <option value="csv">CSV</option>
               </Form.Control>
             </Form.Group>

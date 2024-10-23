@@ -43,7 +43,7 @@ const Navbar = () => {
                         {[
                             { to: '/budget', icon: faDollarSign, label: 'الميزانية' },
                             { to: '/historical-records', icon: faHistory, label: 'السجلات التاريخية' },
-                            { to: '/reserve-amounts', icon: faClipboardCheck, label: 'مبالغ الاحتياطي وطلبات الميزانية' },
+                            { to: '/reserve-amounts', icon: faClipboardCheck, label: 'توزيع المزانية و الطلابات' },
                             { to: '/organizational-structure', icon: faSitemap, label: 'الهيكل التنظيمي' },
                             { to: '/user-permissions', icon: faUserShield, label: 'أذونات المستخدم' },
                             { to: '/reports', icon: faFileAlt, label: 'التقارير' },

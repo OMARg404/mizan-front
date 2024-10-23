@@ -5,15 +5,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const HistoricalRecords = () => {
     // Initialize the records with some default historical data including new fields
     const [records, setRecords] = useState([
-        { year: '2020', details: 'تقرير الأداء السنوي', notes: 'جيد', allocation: '5000', expense: '4500' },
-        { year: '2021', details: 'تقرير المالي', notes: 'ممتاز', allocation: '6000', expense: '5000' },
-        { year: '2022', details: 'تقرير الموارد البشرية', notes: 'متوسط', allocation: '5500', expense: '4800' },
+        { year: '2020', details: 'تقرير الأداء السنوي', notes: 'جيد', allocation: '5000', expense: '4500', source: 'user' },
+        { year: '2021', details: 'تقرير المالي', notes: 'ممتاز', allocation: '6000', expense: '5000', source: 'backend' },
+        { year: '2022', details: 'تقرير الموارد البشرية', notes: 'متوسط', allocation: '5500', expense: '4800', source: 'user' },
     ]);
+    
     const [year, setYear] = useState('');
     const [details, setDetails] = useState('');
     const [notes, setNotes] = useState('');
     const [allocation, setAllocation] = useState(''); // New state for allocation
     const [expense, setExpense] = useState(''); // New state for expense
+    const [source, setSource] = useState('user'); // New state for source
     const [searchTerm, setSearchTerm] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
@@ -50,13 +52,13 @@ const HistoricalRecords = () => {
     };
 
     const addRecord = () => {
-        const newRecord = { year, details, notes, allocation, expense };
+        const newRecord = { year, details, notes, allocation, expense, source };
         setRecords([...records, newRecord]);
     };
 
     const updateRecord = () => {
         const updatedRecords = records.map((record, index) =>
-            index === editIndex ? { year, details, notes, allocation, expense } : record
+            index === editIndex ? { year, details, notes, allocation, expense, source } : record
         );
         setRecords(updatedRecords);
         setIsEditing(false);
@@ -69,6 +71,7 @@ const HistoricalRecords = () => {
         setNotes('');
         setAllocation('');
         setExpense('');
+        setSource('user'); // Reset source to default
     };
 
     const handleEditRecord = (index) => {
@@ -78,6 +81,7 @@ const HistoricalRecords = () => {
         setNotes(recordToEdit.notes);
         setAllocation(recordToEdit.allocation); // Set allocation for editing
         setExpense(recordToEdit.expense); // Set expense for editing
+        setSource(recordToEdit.source); // Set source for editing
         setIsEditing(true);
         setEditIndex(index);
     };
@@ -101,16 +105,18 @@ const HistoricalRecords = () => {
         year: record.year,
         details: record.details,
         notes: record.notes,
-        allocation: record.allocation, // Include allocation in CSV data
-        expense: record.expense, // Include expense in CSV data
+        allocation: record.allocation,
+        expense: record.expense,
+        source: record.source // Include source in CSV data
     }));
 
     const csvHeaders = [
         { label: 'السنة', key: 'year' },
         { label: 'التفاصيل', key: 'details' },
         { label: 'الملاحظات', key: 'notes' },
-        { label: 'التخصيص', key: 'allocation' }, // New header for allocation
-        { label: 'المصروف', key: 'expense' }, // New header for expense
+        { label: 'التخصيص', key: 'allocation' },
+        { label: 'المصروف', key: 'expense' },
+        { label: 'المصدر', key: 'source' }, // New header for source
     ];
 
     return (
@@ -169,6 +175,16 @@ const HistoricalRecords = () => {
                         />
                     </div>
                     <div className="col">
+                        <select
+                            className="form-control"
+                            value={source}
+                            onChange={(e) => setSource(e.target.value)}
+                        >
+                            <option value="user">من المستخدم</option>
+                            <option value="backend">من الخلفية</option>
+                        </select>
+                    </div>
+                    <div className="col">
                         <button type="submit" className="btn btn-primary">
                             {isEditing ? 'تحديث السجل' : 'إضافة سجل'}
                         </button>
@@ -192,8 +208,9 @@ const HistoricalRecords = () => {
                         <th>السنة</th>
                         <th>التفاصيل</th>
                         <th>الملاحظات</th>
-                        <th>التخصيص</th> {/* New header for allocation */}
-                        <th>المصروف</th> {/* New header for expense */}
+                        <th>التخصيص</th>
+                        <th>المصروف</th>
+                        <th>المصدر</th> {/* New header for source */}
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
@@ -204,8 +221,9 @@ const HistoricalRecords = () => {
                                 <td>{record.year}</td>
                                 <td>{record.details}</td>
                                 <td>{record.notes}</td>
-                                <td>{record.allocation}</td> {/* Display allocation */}
-                                <td>{record.expense}</td> {/* Display expense */}
+                                <td>{record.allocation}</td>
+                                <td>{record.expense}</td>
+                                <td>{record.source}</td> {/* Display source */}
                                 <td>
                                     <button
                                         className="btn btn-warning mr-2"
@@ -224,7 +242,7 @@ const HistoricalRecords = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6" className="text-center">
+                            <td colSpan="7" className="text-center">
                                 لا توجد سجلات
                             </td>
                         </tr>
@@ -232,27 +250,15 @@ const HistoricalRecords = () => {
                 </tbody>
             </table>
 
-            <div className="mb-4">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="اسم الملف (مع الامتداد)"
-                    value={fileName}
-                    onChange={(e) => setFileName(e.target.value)}
-                />
-            </div>
-
-            <div className="mb-4">
-                <CSVLink
-                    data={csvData}
-                    headers={csvHeaders}
-                    filename={fileName}
-                    className="btn btn-success"
-                    target="_blank"
-                >
-                    تحميل السجلات
-                </CSVLink>
-            </div>
+            <CSVLink
+                data={csvData}
+                headers={csvHeaders}
+                filename={fileName}
+                className="btn btn-success"
+                target="_blank"
+            >
+                تحميل السجلات بصيغة CSV
+            </CSVLink>
         </div>
     );
 };

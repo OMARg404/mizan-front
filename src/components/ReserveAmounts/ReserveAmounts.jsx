@@ -96,7 +96,7 @@ const ReserveAmounts = () => {
 
     return (
         <div className="container mt-5">
-            <h1>مبالغ الاحتياطي وطلبات الميزانية</h1>
+            <h1>توزيع المزانية و الطلابات</h1>
             <p>تُعتبر مبالغ الاحتياطي أحد العناصر الأساسية في التخطيط المالي للأعمال. تهدف إلى ضمان الاستقرار المالي وتهيئة البيئة المناسبة للنمو المستدام.</p>
 
             <form onSubmit={handleAddOrUpdateRecord} className="mb-4">
