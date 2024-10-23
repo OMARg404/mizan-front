@@ -37,7 +37,7 @@ h2 {
 .table th {
     background-color: #2778c9;
     /* Bootstrap primary color for table header */
-    color: white;
+    color: rgb(44, 44, 44);
     /* White text for headers */
 }
 

@@ -8,9 +8,9 @@ import './DashboardPage.css'; // Ensure you have this file for styles
 const DashboardPage = () => {
   // Sample data for KPIs
   const kpis = [
-    { title: 'إجمالي الإيرادات (Total Revenue)', value: '$100,000' },
-    { title: 'إجمالي المستخدمين (Total Users)', value: '1,500' },
-    { title: 'النمو الشهري (Monthly Growth)', value: '10%' },
+    { title: 'التخصيص (Allocation)', value: '$50,000' }, // Updated KPI for Allocation
+    { title: 'المصروف (Expenditure)', value: '$30,000' }, // Updated KPI for Expenditure
+    { title: 'النمو الشهري (Monthly Growth)', value: '10%' }, // Optional: If you want to keep this
   ];
 
   return (

@@ -6,12 +6,12 @@ import './ReserveAmounts.css'; // Optional: Custom CSS for styling
 
 const ReserveAmounts = () => {
     const [reserveRecords, setReserveRecords] = useState([
-        { amount: '1000', details: 'مبلغ احتياطي لمشروع A' },
-        { amount: '2000', details: 'مبلغ احتياطي لمشروع B' },
-        { amount: '1500', details: 'مبلغ احتياطي لمشروع C' },
+        { allocation: '1000', expense: 'مبلغ احتياطي لمشروع A' },
+        { allocation: '2000', expense: 'مبلغ احتياطي لمشروع B' },
+        { allocation: '1500', expense: 'مبلغ احتياطي لمشروع C' },
     ]);
-    const [amount, setAmount] = useState('');
-    const [details, setDetails] = useState('');
+    const [allocation, setAllocation] = useState('');
+    const [expense, setExpense] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
@@ -27,24 +27,24 @@ const ReserveAmounts = () => {
 
         if (isEditing) {
             const updatedRecords = reserveRecords.map((record, index) => 
-                index === editIndex ? { amount, details } : record
+                index === editIndex ? { allocation, expense } : record
             );
             setReserveRecords(updatedRecords);
             setIsEditing(false);
             setEditIndex(null);
         } else {
-            const newRecord = { amount, details };
+            const newRecord = { allocation, expense };
             setReserveRecords([...reserveRecords, newRecord]);
         }
 
-        setAmount('');
-        setDetails('');
+        setAllocation('');
+        setExpense('');
     };
 
     const handleEditRecord = (index) => {
         const recordToEdit = reserveRecords[index];
-        setAmount(recordToEdit.amount);
-        setDetails(recordToEdit.details);
+        setAllocation(recordToEdit.allocation);
+        setExpense(recordToEdit.expense);
         setIsEditing(true);
         setEditIndex(index);
     };
@@ -55,32 +55,32 @@ const ReserveAmounts = () => {
     };
 
     const filteredRecords = reserveRecords.filter((record) =>
-        record.amount.includes(searchTerm) || 
-        record.details.includes(searchTerm)
+        record.allocation.includes(searchTerm) || 
+        record.expense.includes(searchTerm)
     );
 
     const csvData = filteredRecords.map(record => ({
-        amount: record.amount,
-        details: record.details,
+        allocation: record.allocation,
+        expense: record.expense,
     }));
 
     const csvHeaders = [
-        { label: 'المبلغ', key: 'amount' },
-        { label: 'التفاصيل', key: 'details' },
+        { label: 'التخصيص', key: 'allocation' },
+        { label: 'المصروف', key: 'expense' },
     ];
 
     const pieData = {
-        labels: reserveRecords.map(record => record.details),
+        labels: reserveRecords.map(record => record.expense),
         datasets: [{
-            data: reserveRecords.map(record => parseFloat(record.amount)),
+            data: reserveRecords.map(record => parseFloat(record.allocation)),
             backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A6', '#FFC300', '#DAF7A6'],
         }],
     };
 
     const handleBudgetRequest = (e) => {
         e.preventDefault();
-        setPendingRequests([...pendingRequests, { request: budgetRequest, amount }]);
-        alert(`طلب الميزانية: ${budgetRequest} بمبلغ: ${amount}`);
+        setPendingRequests([...pendingRequests, { request: budgetRequest, amount: allocation }]);
+        alert(`طلب الميزانية: ${budgetRequest} بمبلغ: ${allocation}`);
         setBudgetRequest('');
     };
 
@@ -105,9 +105,9 @@ const ReserveAmounts = () => {
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="المبلغ"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
+                            placeholder="التخصيص"
+                            value={allocation}
+                            onChange={(e) => setAllocation(e.target.value)}
                             required
                         />
                     </div>
@@ -115,9 +115,9 @@ const ReserveAmounts = () => {
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="التفاصيل"
-                            value={details}
-                            onChange={(e) => setDetails(e.target.value)}
+                            placeholder="المصروف"
+                            value={expense}
+                            onChange={(e) => setExpense(e.target.value)}
                             required
                         />
                     </div>
@@ -142,8 +142,8 @@ const ReserveAmounts = () => {
             <table className="table table-bordered">
                 <thead>
                     <tr>
-                        <th>المبلغ</th>
-                        <th>التفاصيل</th>
+                        <th>التخصيص</th>
+                        <th>المصروف</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
@@ -151,8 +151,8 @@ const ReserveAmounts = () => {
                     {filteredRecords.length > 0 ? (
                         filteredRecords.map((record, index) => (
                             <tr key={index}>
-                                <td>{record.amount}</td>
-                                <td>{record.details}</td>
+                                <td>{record.allocation}</td>
+                                <td>{record.expense}</td>
                                 <td>
                                     <button
                                         className="btn btn-warning mr-2"

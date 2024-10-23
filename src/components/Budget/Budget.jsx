@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form, Table, Modal } from 'react-bootstrap';
 import { saveAs } from 'file-saver';
 import { Bar } from 'react-chartjs-2';
@@ -19,6 +19,37 @@ const Budget = () => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState('');
   const [fileFormat, setFileFormat] = useState('txt'); // Default file format
+  const [showFileFormatModal, setShowFileFormatModal] = useState(false);
+  const [allBudgetsData, setAllBudgetsData] = useState('');
+  const [changesMade, setChangesMade] = useState(false); // Track if changes are made
+
+  // Archive data function
+  const archiveData = () => {
+    axios.post('/api/archive', categories)
+      .then(() => {
+        setCategories(categories.map(category => ({
+          ...category,
+          allocation: 0,
+          spent: 0,
+        })));
+        alert('تم أرشفة البيانات بنجاح!');
+      })
+      .catch(error => console.error('Error archiving data:', error));
+  };
+
+  // Call this function at the end of the month
+  useEffect(() => {
+    const today = new Date();
+    if (today.getDate() === 1) {
+      archiveData();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      alert('تم تحديث البيانات!');
+    }
+  }, [categories]);
 
   const handleAddCategory = () => {
     if (newCategory.name && newCategory.description) {
@@ -37,6 +68,12 @@ const Budget = () => {
       return category;
     });
     setCategories(updatedCategories);
+    setChangesMade(true); // Mark changes as made
+  };
+
+  const handleSaveChanges = () => {
+    setChangesMade(false); // Reset changes made flag
+    alert('تم حفظ التغييرات بنجاح!');
   };
 
   const handleDeleteCategory = (index) => {
@@ -72,6 +109,22 @@ const Budget = () => {
     saveAs(blob, `${category.name}_report.${fileFormat}`);
   };
 
+  const handleDownloadAllBudgets = () => {
+    const allBudgetsContent = categories.map(category => (
+      `${category.name},${category.description},${category.allocation},${category.spent}`
+    )).join('\n');
+    setAllBudgetsData(allBudgetsContent);
+    setShowFileFormatModal(true);
+  };
+
+  const downloadAllBudgets = () => {
+    const blob = new Blob([fileFormat === 'csv' ? allBudgetsData : allBudgetsData.replace(/,/g, ' ')], {
+      type: fileFormat === 'csv' ? 'text/csv;charset=utf-8;' : 'text/plain;charset=utf-8;',
+    });
+    saveAs(blob, `all_budgets.${fileFormat}`);
+    setShowFileFormatModal(false);
+  };
+
   const totalAllocation = categories.reduce((total, category) => total + category.allocation, 0);
   const totalSpent = categories.reduce((total, category) => total + category.spent, 0);
 
@@ -105,6 +158,9 @@ const Budget = () => {
               <Card.Text>
                 إجمالي المصروف: {totalSpent}
               </Card.Text>
+              <Button variant="info" onClick={handleDownloadAllBudgets}>
+                تنزيل جميع الميزانيات
+              </Button>
             </Card.Body>
           </Card>
         </Col>
@@ -171,6 +227,11 @@ const Budget = () => {
                   ))}
                 </tbody>
               </Table>
+              {changesMade && (
+                <Button variant="primary" onClick={handleSaveChanges} className="mt-3">
+                  حفظ التغييرات
+                </Button>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -184,7 +245,6 @@ const Budget = () => {
               <Form.Label>اسم القسم</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="أدخل اسم القسم"
                 value={newCategory.name}
                 onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
               />
@@ -193,25 +253,23 @@ const Budget = () => {
               <Form.Label>الوصف</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="أدخل الوصف"
                 value={newCategory.description}
                 onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
               />
             </Form.Group>
             <Button variant="primary" onClick={handleAddCategory}>
-              إضافة القسم
+              إضافة قسم
             </Button>
           </Form>
         </Col>
       </Row>
 
+      {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>تأكيد الحذف</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          هل أنت متأكد أنك تريد حذف هذا القسم؟
-        </Modal.Body>
+        <Modal.Body>هل أنت متأكد أنك تريد حذف هذا القسم؟</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             إلغاء
@@ -222,6 +280,7 @@ const Budget = () => {
         </Modal.Footer>
       </Modal>
 
+      {/* Report Modal */}
       <Modal show={showReportModal} onHide={() => setShowReportModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>تقرير الميزانية</Modal.Title>
@@ -232,6 +291,32 @@ const Budget = () => {
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowReportModal(false)}>
             إغلاق
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* File Format Modal */}
+      <Modal show={showFileFormatModal} onHide={() => setShowFileFormatModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>اختر تنسيق الملف</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formFileFormat">
+              <Form.Label>تنسيق الملف</Form.Label>
+              <Form.Control as="select" value={fileFormat} onChange={(e) => setFileFormat(e.target.value)}>
+                <option value="txt">نص عادي</option>
+                <option value="csv">CSV</option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowFileFormatModal(false)}>
+            إلغاء
+          </Button>
+          <Button variant="success" onClick={downloadAllBudgets}>
+            تنزيل
           </Button>
         </Modal.Footer>
       </Modal>

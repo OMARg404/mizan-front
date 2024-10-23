@@ -1,3 +1,4 @@
+// src/components/Dashboard/ChartComponent.jsx
 import React, { useEffect } from 'react';
 import { Chart, registerables } from 'chart.js';
 import './ChartComponent.css';
@@ -10,13 +11,24 @@ const ChartComponent = () => {
     const myChart = new Chart(ctx, {
       type: 'bar', // or 'line', 'pie', etc.
       data: {
-        labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو'], // Arabic months
+        labels: [
+          'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 
+          'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 
+          'نوفمبر', 'ديسمبر'
+        ], // Arabic months
         datasets: [
           {
-            label: 'الإيرادات (Revenue)', // Arabic label
-            data: [12, 19, 3, 5, 2],
+            label: 'التخصيص (Allocation)', // Arabic label for allocation
+            data: [20000, 15000, 30000, 25000, 40000, 22000, 27000, 31000, 29000, 35000, 23000, 45000], // Sample data for allocation
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+          },
+          {
+            label: 'المصروف (Expenditure)', // Arabic label for expenditure
+            data: [10000, 20000, 15000, 10000, 25000, 12000, 18000, 24000, 20000, 22000, 17000, 29000], // Sample data for expenditure
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
           },
         ],
